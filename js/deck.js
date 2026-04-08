@@ -10,4 +10,21 @@ const name = urlParams.get('deck');
 $(document).ready(function() {
     // Display the deck name on the page
     $('#deck-name-value').text(name);
+
+    $('#btn-back-to-decks').click(function() {
+        window.location.href = '/';
+    });
+
+    $('#btn-delete-deck').on('click', () => {
+        if(confirm('Are you sure you want to delete this deck?')) {
+            // Get decks from local storage
+            const decks = JSON.parse(localStorage.getItem('decks')) || [];
+            // Filter out the deck to be deleted
+            const updatedDecks = decks.filter(deck => deck.name !== name);
+            // Save the updated decks back to local storage
+            localStorage.setItem('decks', JSON.stringify(updatedDecks));
+            // Redirect back to the main page
+            window.location.href = '/';
+        }
+    });
 });
