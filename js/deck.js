@@ -1,16 +1,23 @@
-// Get the full query string part of the URL (e.g., "?name=John+Doe&age=30&role=")
+// Get deck name from URL parameters
 const queryString = window.location.search;
-
-// Create a URLSearchParams object
 const urlParams = new URLSearchParams(queryString);
-
-// Get specific parameter values using the .get() method
 const deckName = urlParams.get('deck');
+
+// Load flashcards from local storage for the current deck
+const decks = JSON.parse(localStorage.getItem('decks')) || [];
+const currentDeck = decks.find(deck => deck.name === deckName);
+const flashcards = currentDeck ? currentDeck.cards : [];
 
 $(document).ready(function() {
     // Display the deck name on the page
     $('#deck-name-value').text(deckName);
 
+    // Display flashcards in the list
+    flashcards.forEach(card => {
+        $('#cards').append(cardItemTemplate(card.question, card.answer));
+    });
+
+    // Handle back to decks button click
     $('#btn-back-to-decks').click(function() {
         window.location.href = '/';
     });
@@ -20,7 +27,7 @@ $(document).ready(function() {
             // Get decks from local storage
             const decks = JSON.parse(localStorage.getItem('decks')) || [];
             // Filter out the deck to be deleted
-            const updatedDecks = decks.filter(deck => deck.name !== name);
+            const updatedDecks = decks.filter(deck => deck.name !== deckName);
             // Save the updated decks back to local storage
             localStorage.setItem('decks', JSON.stringify(updatedDecks));
             // Redirect back to the main page
@@ -38,13 +45,45 @@ $(document).ready(function() {
     var question = $('#questionField').val();
     var answer = $('#answerField').val();
     
-    // Perform actions with data (e.g., append to list, Ajax call)
-    console.log("Q: " + question + " A: " + answer);
-    
+    // Get existing flashcards from local storage
+    const decks = JSON.parse(localStorage.getItem('decks')) || [];
+    const currentDeck = decks.find(deck => deck.name === deckName);
+    const flashcards = currentDeck ? currentDeck.cards : [];
+    // Add new flashcard to the array
+    flashcards.push({ question: question, answer: answer });
+  
+    currentDeck.cards = flashcards; // Update the current deck's cards
+
+    // Save updated flashcards back to local storage immutably
+    const updatedDecks = decks.map(deck => deck.name === deckName ? currentDeck : deck);
+    localStorage.setItem('decks', JSON.stringify(updatedDecks));
+
+
     // Clear fields and hide
     $('#questionField').val('');
     $('#answerField').val('');
     $('#flashcardModal').modal('hide');
+
+    // Update the UI to show the new flashcard immediately
+    $('#cards').append(cardItemTemplate(question, answer));
+
   });
 
 });
+
+function cardItemTemplate(question, answer) {
+    return `
+       <li class="card-item">
+            <div class="d-flex justify-content-between align-items-center">
+               <p><span> Q: ${question}</span>
+                  <br>
+                  <span> A: ${answer}</span>
+               </p>
+               <div>
+                  <button type="button" class="btn btn-secondary btn-sm">Edit</button>
+                  <button type="button" class="btn btn-danger btn-sm">Delete</button>
+               </div>
+            </div>
+         </li>
+    `;
+}

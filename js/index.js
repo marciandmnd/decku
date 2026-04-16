@@ -12,10 +12,12 @@ $(document).ready(function () {
     // Handle create deck button click
     $("#btn-create-deck").click(function () {
         const deckName = prompt("Enter deck name:");
+
         if (deckName) {
             // Save deck to local storage
-            const decks = JSON.parse(localStorage.getItem("decks")) || [];
+            const decks = JSON.parse(localStorage.getItem('decks')) || [];
             decks.push({ name: deckName, cards: [] });
+
             localStorage.setItem("decks", JSON.stringify(decks));
 
             // Add deck to the list
