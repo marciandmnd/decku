@@ -29,11 +29,13 @@
    </div>
    <hr>
    <div class="container cards">
-      <button type="button" class="btn btn-primary" id="btn-add-card">Add Flashcard</button>
+      <button type="button" class="btn btn-primary" id="btn-add-flashcard">Add Flashcard</button>
       <ul id="cards">
       </ul>
    </div>
-   <div class="modal" id="flashcardModal" tabindex="-1" role="dialog">
+
+   <!-- Add Flashcard Modal -->
+   <div class="modal" id="add-flashcard-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
@@ -44,17 +46,44 @@
                <form>
                   <div class="form-group">
                      <label>Question</label>
-                     <input type="text" class="form-control" id="questionField">
+                     <input type="text" class="form-control" id="add-question-field">
                   </div>
                   <div class="form-group">
                      <label>Answer</label>
-                     <input type="text" class="form-control" id="answerField">
+                     <input type="text" class="form-control" id="add-answer-field">
                   </div>
                </form>
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-               <button type="button" class="btn btn-primary" id="saveCard">Save Flashcard</button>
+               <button type="button" class="btn btn-primary" id="modal-btn-add-flashcard">Add Flashcard</button>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Edit Flashcard Modal -->
+   <div class="modal" id="edit-flashcard-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title">Edit Flashcard</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <form>
+                  <div class="form-group">
+                     <label>Question</label>
+                     <input type="text" class="form-control" id="edit-question-field">
+                  </div>
+                  <div class="form-group">
+                     <label>Answer</label>
+                     <input type="text" class="form-control" id="edit-answer-field">
+                  </div>
+               </form>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               <button type="button" class="btn btn-primary" id="modal-btn-edit-flashcard">Edit Flashcard</button>
             </div>
          </div>
       </div>
