@@ -31,7 +31,7 @@ $(document).ready(function () {
 
     // Handle back to decks button click
     $('#btn-back-to-decks').click(function () {
-        window.location.href = '/';
+        window.location.href = './';
     });
 
     $('#btn-delete-deck').on('click', () => {
@@ -45,16 +45,16 @@ $(document).ready(function () {
 
     // Add flashcard to deck click handler
     $('#modal-btn-add-flashcard').on('click', () => {
-        addFlashcardToDeck();
+        addFlashcard();
     });
 
     // Delete flashcard from deck click handler
     $('#cards').on('click', '.btn-delete-card', function () {
-        deleteFlashcardFromDeck.call(this);
+        deleteFlashcard.call(this);
     })
 
     // Edit flashcard in deck
-    $('#cards').on('click', '.btn-edit-card', function () {
+    $('#cards').on('click', '.btn-edit-card', function (){
         editFlashcard.call(this);
     });
 });
@@ -100,7 +100,7 @@ function deleteDeck() {
         // Save the updated decks back to local storage
         localStorage.setItem('decks', JSON.stringify(updatedDecks));
         // Redirect back to the main page
-        window.location.href = '/';
+        window.location.href = './index.html';
     }
 }
 
@@ -111,13 +111,12 @@ function deleteDeck() {
  * 
  * @returns {void}
  */
-function addFlashcardToDeck() {
+function addFlashcard() {
     var question = $addQuestionField.val();
     var answer = $addAnswerField.val();
 
     // Get existing flashcards from local storage
     const decks = JSON.parse(localStorage.getItem('decks')) || [];
-    const currentDeck = decks.find(deck => deck.name === deckName);
     const flashcards = currentDeck ? currentDeck.cards : [];
 
     // index for deleting and editing
@@ -142,6 +141,7 @@ function addFlashcardToDeck() {
 
     // Update the UI to show the new flashcard immediately
     $('#cards').append(cardItemTemplate(question, answer, index));
+    
 }
 
 /**
@@ -150,10 +150,14 @@ function addFlashcardToDeck() {
  * @returns {void}
  */
 function editFlashcard() {
+    console.log('edit flashcard called');
+
     const index = $(this).data('index');
+    console.log('index of flashcard to edit:', index);
     const flashcard = currentDeck.cards.find(card => card.index === index);
 
     if (flashcard) {
+        console.log('check');
         // Populate the edit modal with the flashcard's current values
         $editQuestionField.val(flashcard.question);
         $editAnswerField.val(flashcard.answer);
@@ -189,7 +193,7 @@ function editFlashcard() {
  * 
  * @returns {void}
  */
-function deleteFlashcardFromDeck() {
+function deleteFlashcard() {
     const index = $(this).data('index');
 
     // Get decks from local storage

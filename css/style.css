@@ -40,3 +40,7 @@ ul#cards {
     padding: 10px;
     margin: 10px 0;
 }
+
+.footer a {
+    text-decoration: none
+}

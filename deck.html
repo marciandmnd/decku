@@ -13,9 +13,15 @@
 </head>
 
 <body>
-   <nav class="navbar bg-dark">
+   <nav class="navbar navbar-expand-lg navbar-light bg-dark">
       <div class="container-fluid">
-         <a class="navbar-brand text-warning" href="./index.html">Decku - Flashcard Deck Web Application</a>
+         <a class="navbar-brand text-warning" href="./index.html">Decku</a>
+         <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- 'ms-auto' pushes items to the right -->
+            <ul class="navbar-nav ms-auto">
+               <li class="nav-item"><a class="nav-link text-warning" href="./about.html">About</a></li>
+            </ul>
+         </div>
       </div>
    </nav>
    <div class="container">
@@ -28,7 +34,7 @@
       </div>
    </div>
    <hr>
-   <div class="container cards">
+   <div class="container">
       <button type="button" class="btn btn-primary" id="btn-add-flashcard">Add Flashcard</button>
       <ul id="cards">
       </ul>
