@@ -24,13 +24,13 @@
     border-radius: 8px;
 }
 
-.flashcard {
+.flashcard, .deck {
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px 0;
 }
 
-ul#cards {
+ul#decks, ul#cards {
     list-style: none;
     padding: 0;
 }

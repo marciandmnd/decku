@@ -2,8 +2,8 @@ $(document).ready(function () {
 
     const decks = JSON.parse(localStorage.getItem("decks")) || [];
     decks.forEach((deck) => {
-        $("#decks-list").append(`
-            <li class="nav-item">
+        $("#decks").append(`
+            <li class="deck">
                 <a class="nav-link" href="deck.html?deck=${encodeURIComponent(deck.name)}">${deck.name}</a>
             </li>`
         );
@@ -21,8 +21,8 @@ $(document).ready(function () {
             localStorage.setItem("decks", JSON.stringify(decks));
 
             // Add deck to the list
-            $("#decks-list").append(
-                `<li class="nav-item"><a class="nav-link" href="deck.html?deck=${encodeURIComponent(deckName)}">${deckName}</a></li>`,
+            $("#decks").append(
+                `<li class="deck"><a class="nav-link" href="deck.html?deck=${encodeURIComponent(deckName)}">${deckName}</a></li>`,
             );
         }
     });
