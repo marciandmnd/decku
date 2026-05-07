@@ -22,7 +22,7 @@ $(document).ready(function () {
 
             // Add deck to the list
             $("#decks").append(
-                `<li class="deck"><a class="nav-link" href="deck.html?deck=${encodeURIComponent(deckName)}">${deckName}</a></li>`,
+                `<li class="deck"><a href="deck.html?deck=${encodeURIComponent(deckName)}">${deckName}</a></li>`,
             );
         }
     });

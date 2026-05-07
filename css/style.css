@@ -24,10 +24,19 @@
     border-radius: 8px;
 }
 
-.flashcard, .deck {
+.deck {
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px 0;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.card-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
 }
 
 ul#decks, ul#cards {
@@ -35,12 +44,52 @@ ul#decks, ul#cards {
     padding: 0;
 }
 
-.card-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-}
-
 .footer a {
     text-decoration: none
+}
+
+#flashcard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    border: 1px solid red;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.flashcard {
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 8px;
+        width: 18rem;
+        height: 10rem;
+}
+
+#flashcard-front {
+    background-color: black;
+    color: yellow;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#flashcard-back {
+    background-color: yellow;
+    color: black;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

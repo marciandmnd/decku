@@ -9,6 +9,7 @@ const currentDeck = decks.find(deck => deck.name === deckName);
 const flashcards = currentDeck ? currentDeck.cards : [];
 
 // Initialize jQuery UI elements
+const $btnStudy = $('#btn-study');
 const $btnAddFlashcard = $('#btn-add-flashcard');
 
 const $addFlashcardModal = $('#add-flashcard-modal');
@@ -57,8 +58,17 @@ $(document).ready(function () {
     $('#cards').on('click', '.btn-edit-card', function (){
         editFlashcard.call(this);
     });
+
+    // Study deck click handler
+    $btnStudy.on('click', () => {
+        studyDeck();
+    });
 });
 
+function studyDeck() {
+    // Redirect to the study page for the current deck
+    window.location.href = `./study.html?deck=${encodeURIComponent(deckName)}`;
+}
 
 /**
  * Renders a flashcard item HTML in the flashcard list with edit and delete buttons.
