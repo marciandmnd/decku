@@ -39,6 +39,11 @@
       <button type="button" class="btn btn-primary" id="btn-add-flashcard">Add Flashcard</button>
       <ul id="cards">
       </ul>
+      <div class="cards-container container">
+         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+            <!-- cards inserted here dynamically -->
+         </div>
+      </div>
    </div>
 
    <!-- Add Flashcard Modal -->
@@ -51,7 +56,7 @@
             </div>
             <div class="modal-body">
                <form>
-                  <div class="form-group">
+                  <div class="form-group mb-3">
                      <label>Question</label>
                      <input type="text" class="form-control" id="add-question-field">
                   </div>
@@ -78,7 +83,7 @@
             </div>
             <div class="modal-body">
                <form>
-                  <div class="form-group">
+                  <div class="form-group mb-3">
                      <label>Question</label>
                      <input type="text" class="form-control" id="edit-question-field">
                   </div>
@@ -90,7 +95,8 @@
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-               <button type="button" class="btn btn-primary" id="modal-btn-edit-flashcard">Edit Flashcard</button>
+               <button type="button" class="btn btn-primary" id="btn-edit-card">Edit Flashcard</button>
+               <button type="button" class="btn btn-danger" id="btn-delete-card">Delete</button>
             </div>
          </div>
       </div>

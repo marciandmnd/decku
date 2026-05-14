@@ -1,78 +1,109 @@
+
 // Get deck name from URL parameters
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const deckName = urlParams.get('deck');
+const deckName = urlParams.get("deck");
 
 // Load flashcards from local storage for the current deck
-const decks = JSON.parse(localStorage.getItem('decks')) || [];
-const currentDeck = decks.find(deck => deck.name === deckName);
+const decks = JSON.parse(localStorage.getItem("decks")) || [];
+const currentDeck = decks.find((deck) => deck.name === deckName);
+var currentCardIndex = 0;
 const flashcards = currentDeck ? currentDeck.cards : [];
 
 // Initialize jQuery UI elements
-const $btnStudy = $('#btn-study');
-const $btnAddFlashcard = $('#btn-add-flashcard');
+const $btnStudy = $("#btn-study");
 
-const $addFlashcardModal = $('#add-flashcard-modal');
-const $editFlashcardModal = $('#edit-flashcard-modal');
+const $btnAddFlashcard = $("#btn-add-flashcard");
+const $btnEditCard = $("#btn-edit-card");
+const $btnDeleteCard = $("#btn-delete-card");
 
-const $addQuestionField = $('#add-question-field');
-const $addAnswerField = $('#add-answer-field');
+const $addFlashcardModal = $("#add-flashcard-modal");
+const $editFlashcardModal = $("#edit-flashcard-modal");
 
-const $editQuestionField = $('#edit-question-field');
-const $editAnswerField = $('#edit-answer-field');
+const $addQuestionField = $("#add-question-field");
+const $addAnswerField = $("#add-answer-field");
+
+const $editQuestionField = $("#edit-question-field");
+const $editAnswerField = $("#edit-answer-field");
+
 
 $(document).ready(function () {
     // Display the deck name on the page
-    $('#deck-name-value').text(deckName);
+    $("#deck-name-value").text(deckName);
 
-    // Display flashcards in the list
-    flashcards.forEach(card => {
-        $('#cards').append(cardItemTemplate(card.question, card.answer, card.index));
-    });
+    renderFlashcards(flashcards);
 
     // Handle back to decks button click
-    $('#btn-back-to-decks').click(function () {
-        window.location.href = './';
+    $("#btn-back-to-decks").click(function () {
+        window.location.href = "./";
     });
 
-    $('#btn-delete-deck').on('click', () => {
+    $("#btn-delete-deck").on("click", () => {
         deleteDeck();
     });
 
     // Show add flashcard modal
     $btnAddFlashcard.click(function () {
-        $addFlashcardModal.modal('show');
+        $addFlashcardModal.modal("show");
     });
 
     // Add flashcard to deck click handler
-    $('#modal-btn-add-flashcard').on('click', () => {
+    $("#modal-btn-add-flashcard").on("click", () => {
         addFlashcard();
     });
 
-    // Delete flashcard from deck click handler
-    $('#cards').on('click', '.btn-delete-card', function () {
-        deleteFlashcard.call(this);
-    })
+    $btnEditCard.on("click", () => {
+        editFlashcard();
+    });
 
-    // Edit flashcard in deck
-    $('#cards').on('click', '.btn-edit-card', function (){
-        editFlashcard.call(this);
+    $btnDeleteCard.on("click", () => {
+        deleteFlashcard();
+    });
+
+    $(".cards-container").on("click", ".card-item", function () {
+        const index = $(this).data("index");
+        showEditModal(index);
     });
 
     // Study deck click handler
-    $btnStudy.on('click', () => {
+    $btnStudy.on("click", () => {
         studyDeck();
     });
 });
 
+
+/**
+ * Renders the flashcards for the current deck in the UI.
+ *
+ * @returns {void}
+ */
+function renderFlashcards(flashcards) {
+    const $cardsContainer = $(".cards-container .row");
+    $cardsContainer.empty(); // Clear existing cards
+    let index = 0;
+
+    flashcards.forEach(card => {
+        $cardsContainer.append(
+            cardItemTemplate(card.question, card.answer, index++),
+        );
+    });
+}
+
+
+/**
+ * Redirects the user to the study page for the current deck.
+ *
+ * @returns {void}
+ */
 function studyDeck() {
     // Redirect to the study page for the current deck
     window.location.href = `./study.html?deck=${encodeURIComponent(deckName)}`;
 }
 
+
 /**
  * Renders a flashcard item HTML in the flashcard list with edit and delete buttons.
- * 
+ *
  * @param {string} question - The question for the flashcard.
  * @param {string} answer - The answer for the flashcard.
  * @param {number} index - The index of the flashcard.
@@ -80,45 +111,45 @@ function studyDeck() {
  */
 function cardItemTemplate(question, answer, index) {
     return `
-       <li class="card-item">
+        <div class="col card-item" data-index="${index}">
             <div class="d-flex justify-content-between align-items-center">
-               <p><span> Q: ${question}</span>
-                  <br>
-                  <span> A: ${answer}</span>
-               </p>
-               <div>
-                  <button type="button" class="btn btn-secondary btn-sm btn-edit-card" data-index="${index}">Edit</button>
-                  <button type="button" class="btn btn-danger btn-sm btn-delete-card" data-index="${index}">Delete</button>
-               </div>
+                <div>
+                    <p><strong>Question:</strong><br>
+                    ${question}</p>
+                    <p><strong>Answer:</strong><br>
+                    ${answer}</p>
+                </div>
             </div>
-         </li>
+        </div>
     `;
 }
+
 
 /**
  * Deletes the current deck after confirming with the user.
  * It removes the deck from local storage and redirects back to the main page.
- * 
+ *
  * @returns {void}
  */
 function deleteDeck() {
-    if (confirm('Are you sure you want to delete this deck?')) {
+    if (confirm("Are you sure you want to delete this deck?")) {
         // Get decks from local storage
-        const decks = JSON.parse(localStorage.getItem('decks')) || [];
+        const decks = JSON.parse(localStorage.getItem("decks")) || [];
         // Filter out the deck to be deleted
-        const updatedDecks = decks.filter(deck => deck.name !== deckName);
+        const updatedDecks = decks.filter((deck) => deck.name !== deckName);
         // Save the updated decks back to local storage
-        localStorage.setItem('decks', JSON.stringify(updatedDecks));
+        localStorage.setItem("decks", JSON.stringify(updatedDecks));
         // Redirect back to the main page
-        window.location.href = './index.html';
+        window.location.href = "./index.html";
     }
 }
+
 
 /**
  * Adds a new flashcard to the current deck.
  * It retrieves the question and answer from the input fields, updates the local storage with the new flashcard,
  * and updates the UI to display the new flashcard immediately.
- * 
+ *
  * @returns {void}
  */
 function addFlashcard() {
@@ -126,7 +157,7 @@ function addFlashcard() {
     var answer = $addAnswerField.val();
 
     // Get existing flashcards from local storage
-    const decks = JSON.parse(localStorage.getItem('decks')) || [];
+    const decks = JSON.parse(localStorage.getItem("decks")) || [];
     const flashcards = currentDeck ? currentDeck.cards : [];
 
     // index for deleting and editing
@@ -138,21 +169,36 @@ function addFlashcard() {
     currentDeck.cards = flashcards; // Update the current deck's cards
 
     // Save updated flashcards back to local storage immutably
-    const updatedDecks = decks.map(deck => deck.name === deckName ? currentDeck : deck);
-    localStorage.setItem('decks', JSON.stringify(updatedDecks));
-
-    // get length of deck to use as index for newly added card
-    // index required for deleting
+    const updatedDecks = decks.map((deck) =>
+        deck.name === deckName ? currentDeck : deck,
+    );
+    localStorage.setItem("decks", JSON.stringify(updatedDecks));
 
     // Clear fields and hide
-    $addQuestionField.val('');
-    $addAnswerField.val('');
-    $addFlashcardModal.modal('hide');
+    $addQuestionField.val("");
+    $addAnswerField.val("");
+    $addFlashcardModal.modal("hide");
 
     // Update the UI to show the new flashcard immediately
-    $('#cards').append(cardItemTemplate(question, answer, index));
-    
+    renderFlashcards(flashcards);
 }
+
+
+/**
+ * Edits an existing flashcard in the current deck.
+ *
+ * @returns {void}
+ */
+function showEditModal(index) {
+    currentCardIndex = index;
+
+    const flashcard = currentDeck.cards.find((card) => card.index === currentCardIndex);
+
+    $editQuestionField.val(flashcard.question);
+    $editAnswerField.val(flashcard.answer);
+    $editFlashcardModal.modal("show");
+}
+
 
 /**
  * Edits an existing flashcard in the current deck.
@@ -160,64 +206,59 @@ function addFlashcard() {
  * @returns {void}
  */
 function editFlashcard() {
-    console.log('edit flashcard called');
+    const flashcard = currentDeck.cards.find((card) => card.index === currentCardIndex);
 
-    const index = $(this).data('index');
-    console.log('index of flashcard to edit:', index);
-    const flashcard = currentDeck.cards.find(card => card.index === index);
+    const updatedQuestion = $editQuestionField.val();
+    const updatedAnswer = $editAnswerField.val();
 
-    if (flashcard) {
-        console.log('check');
-        // Populate the edit modal with the flashcard's current values
-        $editQuestionField.val(flashcard.question);
-        $editAnswerField.val(flashcard.answer);
-        $editFlashcardModal.modal('show');
-    }
+    // Update the flashcard in the current deck
+    flashcard.question = updatedQuestion;
+    flashcard.answer = updatedAnswer;
 
-    // Handle save changes button click in the edit modal
-    $('#modal-btn-edit-flashcard').on('click', () => {
-        const updatedQuestion = $editQuestionField.val();
-        const updatedAnswer = $editAnswerField.val();
-        // Update the flashcard in the current deck
-        flashcard.question = updatedQuestion;
-        flashcard.answer = updatedAnswer;
+    currentDeck.cards = currentDeck.cards.map((card) =>
+        card.index === currentCardIndex ? flashcard : card,
+    );
 
-        currentDeck.cards = currentDeck.cards.map(card => card.index === index ? flashcard : card);
+    // Save updated flashcards back to local storage immutably
+    const updatedDecks = decks.map((deck) =>
+        deck.name === deckName ? currentDeck : deck,
+    );
+    localStorage.setItem("decks", JSON.stringify(updatedDecks));
+    renderFlashcards(currentDeck.cards);
 
-        // Save updated flashcards back to local storage immutably
-        const updatedDecks = decks.map(deck => deck.name === deckName ? currentDeck : deck);
-        localStorage.setItem('decks', JSON.stringify(updatedDecks));
-
-        // Update the UI to reflect the changes
-        const $cardItem = $(`.btn-edit-card[data-index="${index}"]`).closest('.card-item');
-        $cardItem.find('p').html(`<span> Q: ${updatedQuestion}</span><br><span> A: ${updatedAnswer}</span>`);
-
-        // Hide the edit modal
-        $editFlashcardModal.modal('hide');
-
-    });
+    $editFlashcardModal.modal("hide");
 }
+
 
 /**
  * Deletes a flashcard from the current deck.
- * 
+ *
  * @returns {void}
  */
 function deleteFlashcard() {
-    const index = $(this).data('index');
+    if (confirm("Are you sure you want to delete this card?")) {
 
-    // Get decks from local storage
-    const decks = JSON.parse(localStorage.getItem('decks')) || [];
-
-    // Get the current deck
-    const currentDeck = decks.find(deck => deck.name === deckName);
-
-    if (currentDeck) {
         // Remove the flashcard with the specified index
-        currentDeck.cards = currentDeck.cards.filter(card => card.index !== index);
+        currentDeck.cards = currentDeck.cards.filter(
+            (card) => card.index !== currentCardIndex,
+        );
+
+        // reset the index of the remaining flashcards
+        currentDeck.cards = currentDeck.cards.map((card, idx) => ({
+            ...card,
+            index: idx,
+        }));
+        
+        // replace the current deck with the updated deck in the decks array
+        const updatedDecks = decks.map((deck) =>
+            deck.name === deckName ? currentDeck : deck,
+        );
+
         // Save the updated decks back to local storage
-        localStorage.setItem('decks', JSON.stringify(decks));
-        // Remove the flashcard from the UI
-        $(this).closest('.card-item').remove();
+        localStorage.setItem("decks", JSON.stringify(updatedDecks));
+
+        // Update the UI
+        renderFlashcards(currentDeck.cards);
+        $editFlashcardModal.modal("hide");
     }
 }
